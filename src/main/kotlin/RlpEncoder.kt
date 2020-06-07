@@ -4,16 +4,29 @@ import kotlin.math.pow
 object RlpEncoder {
 
     fun encode(input: ByteArray) : ByteArray? {
-        if(input.size == 1) return input
-        else if(input.size in 2..55 || input.isEmpty()) return encodeMedium(input)
-        else if(input.size < 256.toDouble().pow(8.toDouble())) return encodeLong(input)
+        return if(input.size == 1) input
+        else if(input.size in 2..55 || input.isEmpty()) encodeMedium(input)
+        else if(input.size < 256.toDouble().pow(8.toDouble())) encodeLong(input)
         else  throw Exception("Long input provided!")
     }
 
     fun encode(inputList: List<ByteArray>) : ByteArray? {
         val payloadSize = payloadSize(inputList)
-        if (payloadSize in 0..55) return encodeSmallList(inputList, payloadSize)
-        else return null
+        return if (payloadSize in 0..55) encodeSmallList(inputList, payloadSize)
+        else encodeLargeList(inputList, payloadSize)
+    }
+
+    private fun encodeLargeList(inputList: List<ByteArray>, payloadSize: Int): ByteArray {
+        val prefix = 0xf7 + payloadSize.toString().length - 1
+        val concatInput: ByteArray = concatByteArray(inputList)
+        return ByteArray(payloadSize + 2) {
+                i ->
+            when(i) {
+                0 -> prefix.toByte()
+                1 -> concatInput.size.toByte()
+                else -> concatInput[i - 2]
+            }
+        }
     }
 
     private fun encodeSmallList(inputList: List<ByteArray>, payloadSize: Int): ByteArray {
