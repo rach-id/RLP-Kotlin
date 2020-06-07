@@ -47,10 +47,6 @@ object RlpEncoder {
         return concat.toByteArray()
     }
 
-//    private fun payloadSize(input: ByteArray): Any {
-//        if(input::class == ByteArray::class) return encode(input is ByteArray)
-//    }
-
     private fun payloadSize(input: List<ByteArray>): Int {
         return input.map { it.size }.sum()
     }
