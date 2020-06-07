@@ -24,6 +24,14 @@ class RlpDecoderTest {
     @Test
     fun `short size list test`() {
         val encodedInput = byteArrayOf(0xc8.toByte(), 0x83.toByte(),0x63,0x61,0x74, 0x83.toByte(),0x64,0x6f,0x67)
-        assert(decode(encodedInput) == "cat,dog")
+        assert(decode(encodedInput) == "[cat,dog]")
+    }
+
+    @Test
+    fun `nested list test`() {
+        val encodedInput = byteArrayOf(0xc7.toByte(), 0xc0.toByte(), 0xc1.toByte(),
+            0xc0.toByte(), 0xc3.toByte(), 0xc0.toByte(), 0xc1.toByte(), 0xc0.toByte()
+        )
+        assert(decode(encodedInput) == "[[], [[]], [[], [[]]]]")
     }
 }
