@@ -22,7 +22,7 @@ object RlpDecoder {
             decodedList += decode(currentList.toByteArray())
         }
 
-        return "[${decodedList.joinToString(", ")}]"
+        return "[${decodedList.joinToString(",")}]"
     }
 
     private fun decodeLongList(encodedInput: ByteArray): String {
@@ -35,7 +35,7 @@ object RlpDecoder {
             decodedList += decode(currentList.toByteArray())
         }
 
-        return "[${decodedList.joinToString(", ")}]"
+        return "[${decodedList.joinToString(",")}]"
     }
 
     private fun getLength(hexEncodedInput: String): Int {
@@ -58,6 +58,6 @@ object RlpDecoder {
 
     private fun decodeLongString(encodedInput: ByteArray): String {
         val hexEncodedInput = encodedInput.toHexString()
-        return encodedInput.slice(2..getLength(hexEncodedInput)).toByteArray().toHexString().hexToAscii()
+        return encodedInput.slice(2..(getLength(hexEncodedInput) + 1)).toByteArray().toHexString().hexToAscii() // FIXME: why + 1 in the length ?
     }
 }

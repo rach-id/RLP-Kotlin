@@ -32,6 +32,6 @@ class RlpDecoderTest {
         val encodedInput = byteArrayOf(0xc7.toByte(), 0xc0.toByte(), 0xc1.toByte(),
             0xc0.toByte(), 0xc3.toByte(), 0xc0.toByte(), 0xc1.toByte(), 0xc0.toByte()
         )
-        assert(decode(encodedInput) == "[[], [[]], [[], [[]]]]")
+        assert(decode(encodedInput) == "[[],[[]],[[],[[]]]]")
     }
 }
